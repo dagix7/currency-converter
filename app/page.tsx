@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import getExchangeRates from "@/utils/api";
-
+import { historyItem } from "@/types";
 export default function ConverterPage() {
   const [rates, setRates] = useState<Record<string, number> | null>(null);
   const [amount, setAmount] = useState<number>(1);
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("ETB");
   const [loading, setLoading] = useState(true);
-
+  const[history,setHistory]=useState<historyItem[]>([])
   useEffect(() => {
     getExchangeRates().then((data) => {
       if (data) {
