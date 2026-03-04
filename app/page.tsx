@@ -18,8 +18,6 @@ export default function ConverterPage() {
     });
 
 const savedHistory=localStorage.getItem('conversation_history')
-
-
   if(savedHistory){
     try{setHistory(JSON.parse(savedHistory))}
   
@@ -30,9 +28,13 @@ const savedHistory=localStorage.getItem('conversation_history')
   
   }, []);
 
-  const result = rates 
-    ? (amount * (rates[toCurrency] / rates[fromCurrency])).toFixed(2) 
-    : "0.00";
+  const saveToHistory=(newItem:historyItem)=>{
+const updatedHistory=[newItem,...history].slice(0,10);
+setHistory(updatedHistory);
+localStorage.setItem('conversation_history',JSON.stringify(updatedHistory))
+
+  }
+
 
   if (loading) {
     return (
@@ -99,9 +101,10 @@ const savedHistory=localStorage.getItem('conversation_history')
               Converted Amount
             </p>
             <div className="flex items-center justify-center space-x-3">
-              <span className="text-4xl md:text-5xl font-black text-blue-600">
-                {result}
-              </span>
+             <div>  
+              <button  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Convert</button>
+              
+            </div> 
               <span className="text-2xl font-bold text-blue-400">{toCurrency}</span>
             </div>
             <p className="mt-4 text-xs text-gray-400">
