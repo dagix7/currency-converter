@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import getExchangeRates from "@/utils/api";
 import { historyItem } from "@/types";
+import HistoryList from "@/components/historyList";
 export default function ConverterPage() {
   const [rates, setRates] = useState<Record<string, number> | null>(null);
   const [amount, setAmount] = useState<number>(1);
@@ -9,6 +10,7 @@ export default function ConverterPage() {
   const [toCurrency, setToCurrency] = useState("ETB");
   const [loading, setLoading] = useState(true);
   const[history,setHistory]=useState<historyItem[]>([])
+  const[result,setResult]=useState<number|null>(null)
   useEffect(() => {
     getExchangeRates().then((data) => {
       if (data) {
@@ -36,6 +38,26 @@ localStorage.setItem('conversation_history',JSON.stringify(updatedHistory))
   }
 
 
+const handleConvert = () => {
+  if (!rates) return;
+
+  const calculated = (amount * (rates[toCurrency] / rates[fromCurrency])).toFixed(2);
+  
+  // 1. Update the result state (this makes it visible)
+  setResult(Number(calculated));
+
+  // 2. Save to history
+  const newItem = {
+    id: Date.now(),
+    from: fromCurrency,
+    to: toCurrency,
+    amount,
+    convertedAmount: Number(calculated),
+    date: new Date().toLocaleTimeString()
+  };
+  saveToHistory(newItem);
+};
+
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100">
@@ -45,7 +67,8 @@ localStorage.setItem('conversation_history',JSON.stringify(updatedHistory))
   }
 
   return (
-    <main className=" bg-gray-50 py-12 px-4">
+    <main className="flex flex-row bg-gray-50 py-2 px-4 h-[calc(100vh-104px)]">
+      <div className="leftside flex-2/3 w-2/3 overflow-y-auto px-4"> 
       <div className="max-w-4xl mx-auto">
         
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
@@ -95,27 +118,38 @@ localStorage.setItem('conversation_history',JSON.stringify(updatedHistory))
             </div>
           </div>
 
-          {/* Result Display */}
-          <div className="mt-12 p-6 bg-blue-50 rounded-xl border border-blue-100 text-center">
-            <p className="text-gray-600 text-sm uppercase tracking-wide font-semibold mb-2">
-              Converted Amount
-            </p>
-            <div className="flex items-center justify-center space-x-3">
-             <div>  
-              <button  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Convert</button>
-              
-            </div> 
-              <span className="text-2xl font-bold text-blue-400">{toCurrency}</span>
-            </div>
-            <p className="mt-4 text-xs text-gray-400">
-              1 {fromCurrency} = {(rates![toCurrency] / rates![fromCurrency]).toFixed(4)} {toCurrency}
-            </p>
-          </div>
+          {/* Only show this entire section IF result exists */}
+{result && (
+  <div className="mt-4 p-2 bg-blue-50 rounded-xl border border-blue-100 text-center animate-in fade-in zoom-in duration-300">
+    <p className="text-gray-600 text-sm font-semibold mb-2">RESULT</p>
+    <div className="flex items-center justify-center space-x-3">
+      <span className="text-4xl font-black text-blue-600">{result}</span>
+      <span className="text-2xl font-bold text-blue-400">{toCurrency}</span>
+    </div>
+  </div>
+)}
+
+{/* The Button is always visible */}
+<div className="mt-4 flex justify-center">
+  <button 
+    onClick={handleConvert}
+    className="px-8 py-6 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg active:scale-95 transition-all"
+  >
+    Convert 
+  </button>
+</div>
 
         </div>
 
        
       </div>
+      </div>
+
+
+      <div className=" flex w-1/3 overflow-y-auto p-4 right-side border-l border-black px-8 ml-5"> 
+        <HistoryList history={history}/>
+      </div>
+      
     </main>
   );
 }
