@@ -16,6 +16,18 @@ export default function ConverterPage() {
       }
       setLoading(false);
     });
+
+const savedHistory=localStorage.getItem('conversation_history')
+
+
+  if(savedHistory){
+    try{setHistory(JSON.parse(savedHistory))}
+  
+     catch(erorr){
+    console.error(erorr,"failed to parse the error..")
+   }
+  }
+  
   }, []);
 
   const result = rates 
