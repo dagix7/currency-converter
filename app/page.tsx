@@ -11,6 +11,7 @@ export default function ConverterPage() {
   const [loading, setLoading] = useState(true);
   const[history,setHistory]=useState<historyItem[]>([])
   const[result,setResult]=useState<number|null>(null)
+ 
   useEffect(() => {
     getExchangeRates().then((data) => {
       if (data) {
@@ -27,6 +28,8 @@ const savedHistory=localStorage.getItem('conversation_history')
     console.error(erorr,"failed to parse the error..")
    }
   }
+
+  
   
   }, []);
 
@@ -36,7 +39,8 @@ setHistory(updatedHistory);
 localStorage.setItem('conversation_history',JSON.stringify(updatedHistory))
 
   }
-
+ 
+  
 
 const handleConvert = () => {
   if (!rates) return;
@@ -118,6 +122,10 @@ const handleConvert = () => {
             </div>
           </div>
 
+<div> 
+  <button className="h-3 w-3 onclick={} bg-green-300"> like</button>
+
+</div>
           {/* Only show this entire section IF result exists */}
 {result && (
   <div className="mt-4 p-2 bg-blue-50 rounded-xl border border-blue-100 text-center animate-in fade-in zoom-in duration-300">
