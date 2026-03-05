@@ -31,6 +31,13 @@ const savedHistory=localStorage.getItem('conversation_history')
    }
   }
 
+   const favourites=localStorage.getItem('favourites')
+        if(favourites){
+          try{setFavourites(JSON.parse(favourites))}
+              catch(erorr){
+            console.error(erorr,"failed to parse the error..")
+              }
+        }
   
   
   }, []);
@@ -63,9 +70,9 @@ const handleConvert = () => {
   };
   saveToHistory(newItem);
 };
-
+const isFavourite = favourites.includes(`${fromCurrency}-${toCurrency}`);
 const handleFavouriteClick = () => {
-  const favString = ` ${fromCurrency}-${toCurrency}`;
+  const favString = `${fromCurrency}-${toCurrency}`;
   if (!favourites.includes(favString)) {
     const updatedFavourites = [...favourites, favString];
     setFavourites(updatedFavourites);
@@ -140,7 +147,9 @@ else {
           </div>
 
 
-  <button className=" onclick={}  flex justify-end mt-4">< FaHeart className="h-6 w-6  text-red-600"/></button>
+  <button className="  cursor-pointer flex justify-end mt-4" onClick={handleFavouriteClick}>
+    <FaHeart className={`h-6 w-6 transition-colors ${ isFavourite?  "text-red-600": "text-gray-600" } `}/>
+  </button>
 
 
           {/* Only show this entire section IF result exists */}
