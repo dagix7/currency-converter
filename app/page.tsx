@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { FaHeart } from 'react-icons/fa';
 import getExchangeRates from "@/utils/api";
 import { historyItem } from "@/types";
 import HistoryList from "@/components/historyList";
@@ -11,6 +12,7 @@ export default function ConverterPage() {
   const [loading, setLoading] = useState(true);
   const[history,setHistory]=useState<historyItem[]>([])
   const[result,setResult]=useState<number|null>(null)
+  const [favourites,setFavourites]=useState<string[]>([])
  
   useEffect(() => {
     getExchangeRates().then((data) => {
@@ -60,6 +62,21 @@ const handleConvert = () => {
     date: new Date().toLocaleTimeString()
   };
   saveToHistory(newItem);
+};
+
+const handleFavouriteClick = () => {
+  const favString = ` ${fromCurrency}-${toCurrency}`;
+  if (!favourites.includes(favString)) {
+    const updatedFavourites = [...favourites, favString];
+    setFavourites(updatedFavourites);
+    localStorage.setItem('favourites', JSON.stringify(updatedFavourites));
+  }
+else {
+  const updatedFavourites = favourites.filter(fav => fav !== favString);
+  setFavourites(updatedFavourites);
+  localStorage.setItem('favourites', JSON.stringify(updatedFavourites));
+}
+
 };
 
   if (loading) {
@@ -122,10 +139,10 @@ const handleConvert = () => {
             </div>
           </div>
 
-<div> 
-  <button className="h-3 w-3 onclick={} bg-green-300"> like</button>
 
-</div>
+  <button className=" onclick={}  flex justify-end mt-4">< FaHeart className="h-6 w-6  text-red-600"/></button>
+
+
           {/* Only show this entire section IF result exists */}
 {result && (
   <div className="mt-4 p-2 bg-blue-50 rounded-xl border border-blue-100 text-center animate-in fade-in zoom-in duration-300">

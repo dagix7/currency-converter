@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaLinkedin,FaTelegram,FaGithub } from 'react-icons/fa';
+import { FaLinkedin,FaTelegram,FaGithub } from 'react-icons/fa';  
 export default function (){
 
 
