@@ -1,7 +1,6 @@
 "use client"
 import {useState, useEffect} from 'react'
-import {historyItem} from '@/types'
-
+import {useRouter} from 'next/navigation'
 export default function Favourites() {
      const[favourites,setFavourites]=useState<string[]>([])
 
@@ -14,9 +13,11 @@ export default function Favourites() {
               }
         }
     },[])
+const router=useRouter();
 
-    
-
+const handleClick=()=>{
+    router.push('http://localhost:3000/')
+}
 
 
 return(
@@ -29,7 +30,7 @@ return(
         ) : (
             <ul className="space-y-2">
                 {favourites.map((item, index) => (
-                    <li key={index} className="p-2 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <li key={index} className="p-2 cursor-pointer bg-yellow-50 rounded-lg border border-yellow-200" onClick={handleClick}>
                         {item}
                     </li>
                 ))}
