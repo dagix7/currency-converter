@@ -104,7 +104,7 @@ else {
             Currency Converter
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             
             <div className="flex flex-col space-y-2">
               <label className="text-sm font-medium text-gray-600">Amount</label>
@@ -144,12 +144,14 @@ else {
                 ))}
               </select>
             </div>
+
+            <button className="  cursor-pointer flex items-center justify-center pb-2.5 flex-col space-y-2 " onClick={handleFavouriteClick}>
+             <FaHeart className={`h-6 w-6 transition-colors ${ isFavourite?  "text-red-600": "text-gray-600" } `}/>
+            </button>
           </div>
 
 
-  <button className="  cursor-pointer flex justify-end mt-4" onClick={handleFavouriteClick}>
-    <FaHeart className={`h-6 w-6 transition-colors ${ isFavourite?  "text-red-600": "text-gray-600" } `}/>
-  </button>
+  
 
 
           {/* Only show this entire section IF result exists */}
